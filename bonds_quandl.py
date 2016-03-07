@@ -31,6 +31,7 @@ spaaa = Quandl.get("SPDJ/SPUSG2AT", trim_start="2014-01-02", trim_end="2016-02-2
 
 maaa[-10:]
 
+#moody's?
 baa = Quandl.get("MOODY/DBAAYLD", returns="pandas", trim_start="2014-01-02", trim_end="2016-02-17")
 
 baa[-10:]
@@ -50,6 +51,30 @@ ML offers:
 mlccc=Quandl.get("ML/CCCY",returns="pandas",trim_start="2012-01-02", trim_end="2016-02-20")
 
 mlhyoas = Quandl.get("ML/HYOAS", trim_start="2012-01-02", trim_end="2016-02-20")
+
+mlhyoas[-5:]
+mlccc[-5:]
+
+'''
+Let's see how CCC yield and HY OAS move together... we should try to explain why they will vary. First off, they will vary depending on the volatility of Investment Grade corporates, or whatever is the benchmark
+'''
+fig=plt.figure()
+plt.plot_date(mlccc.index,mlccc,'b-')
+plt.plot_date(mlccc.index,mlhyoas,'g-')
+plt.setp(labels, rotation=90)
+plt.show()
+
+#that plot looks good... now will try to rotate the x-axis labels... the below didn't work... xticks() function (the one w/arguments) may need to be redone
+fig=plt.figure()
+plt.xticks(mlccc.index)
+locs,labels=plt.xticks()
+plt.setp(labels,rotation=45)
+plt.plot_date(mlccc.index,mlccc,'b-')
+plt.plot_date(mlccc.index,mlhyoas,'g-')
+plt.show()
+
+#scatterplot of these two datasets reveals a strong positive correlation:
+plt.scatter(mlccc,mlhyoas)
 
 '''
 SPY continuos contract

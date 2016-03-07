@@ -8,6 +8,7 @@ Created on Thu Mar  3 15:44:40 2016
 import sys
 import Quandl
 sys.path.append('G:/Property/Luis_C/statsLearning')
+sys.path.append('/home/lechuza/Documents/economicAnalysis/trading')
 import sma as sma 
 import testOut as to
 import imp
@@ -27,12 +28,18 @@ maaa.index[-1:].values[0]
 pd.Series(maaa.index)[-1:]
 
 
+
+
 moodys.dayChoose(5)
+mlhyoas = Quandl.get("ML/HYOAS", trim_start="2012-01-02", trim_end="2016-02-20")
+ml=sma.SMA(mlhyoas)
+ml.sma2sma() #unhashable type: 'slice'
 
 np.mean(maaa.ix[-5:,0])
 
 #list all attributes
-dir(to)
+dir(sma)
+
 df=to.dayChoose(maaa,5)
 #test=to.dayTime(maaa)
 type(df)

@@ -35,8 +35,24 @@ class SMA(object):
         df.columns=['SMA','Current is above']
         
         return df
-    def testy(self):
-        return self.precios.ix[-3:,0]
+    def sma2sma(self):
+        three=np.mean(self.precios.ix[-3:,0])
+        five=np.mean(self.precios.ix[-5:,0])
+        ten=np.mean(self.precios.ix[-10:,0])
+        thirty=np.mean(self.precios[-30:,0])
+        
+        thre_fiv=three>five
+        thre_ten=three>ten
+        fi_ten=five>ten
+        ten_thirty=ten>thirty
+        
+        d={'thre_fiv':['three-day SMA > five-day SMA',thre_fiv],'thre_ten':['three-day SMA > ten-day',thre_ten], 'fi_ten':['five-day SMA > ten-day',fi_ten],'ten_thirty':['ten-day SMA > thirty-day',ten_thirty]}
+        
+        df=pd.DataFrame.from_dict(data=d,orient='index')
+        df.columns=['BS','SMA Comparison','Is Short term Above LT']
+        
+        return df
+        
         # np.mean(self.precios.ix[-3:,0])
         '''
         self.precios[-days:]/days #rolling average
