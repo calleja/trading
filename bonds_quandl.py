@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Feb 17 09:21:37 2016
-
 @author: CallejaL
+
+bonds_quandl.py
 """
 
 import Quandl
@@ -16,7 +17,6 @@ import quandl_ror as ror
 Moodys Aaa
 bonds having as close to 30 years maturity as possible
 IRAAAD.US = Moody's seasoned corporate bonds rated Aaa
-
 The "corporate" yields are unweighted averages of the more specific "industrial" and "utility" categories.  These are "long-term" bonds, with minimum and average maturities of 20 and 28 years, respectively.  The dataset adds Aa and A ratings but nothing lower, as its focus is investment-grade bonds
 '''
 #moody's simple yield of investment grade bonds
@@ -124,3 +124,4 @@ np.corrcoef(aaa_df['ml'],aaa_df['moodys'])
 junk=pd.concat([mlccc,mlhyoas],join='inner',axis=1)
 junk.columns=['ccc','hyoas']
 plt.figure();junk.plot(); plt.legend(loc='best')
+

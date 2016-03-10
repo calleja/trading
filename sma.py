@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Mar  1 16:37:32 2016
-
 @author: CallejaL
-
 Simple moving average
+
+sma.py
 """
 import numpy as np, pandas as pd
 
@@ -12,11 +12,13 @@ import warnings
 warnings.simplefilter(action = "ignore", category = RuntimeWarning)
 
 class SMA(object):
-    def __init__(self,prices):
-        self.precios=prices #an array of prices
+    def __init__(self,prices,dtype):
+        #dtype=whether dataframe or numpy series
+        self.precios=prices #a df of prices
         self.today=self.precios[-1:]        
         self.todayPrice=self.today.values[0][0]
         self.toDate=str(self.today.index.values[0])
+        self.dtype=dtype #pandas or numpy array
     def status(self):
      #create a rolling day-day moving average
         #roll=pd.rolling_mean(self.precios,days)
@@ -39,7 +41,7 @@ class SMA(object):
         three=np.mean(self.precios.ix[-3:,0])
         five=np.mean(self.precios.ix[-5:,0])
         ten=np.mean(self.precios.ix[-10:,0])
-        thirty=np.mean(self.precios[-30:,0])
+        thirty=np.mean(self.precios.ix[-30:,0])
         
         thre_fiv=three>five
         thre_ten=three>ten
@@ -49,29 +51,8 @@ class SMA(object):
         d={'thre_fiv':['three-day SMA > five-day SMA',thre_fiv],'thre_ten':['three-day SMA > ten-day',thre_ten], 'fi_ten':['five-day SMA > ten-day',fi_ten],'ten_thirty':['ten-day SMA > thirty-day',ten_thirty]}
         
         df=pd.DataFrame.from_dict(data=d,orient='index')
-        df.columns=['BS','SMA Comparison','Is Short term Above LT']
+        df.columns=['SMA Comparison','Is Short term Above LT']
         
         return df
         
-        # np.mean(self.precios.ix[-3:,0])
-        '''
-        self.precios[-days:]/days #rolling average
-        vec=1/days
-        np.convolve()
-
-        #not exactly working properly
-        maaa.shape
-        test=maaa.iloc[:,0]
-        test1=np.convolve(test,np.ones(3,)/3,mode='valid')[2:]
-        test.head()
-        test1[0:5]
-        type(test1)
-        
-        np.cumsum(test[:3])/3
-        roll=pd.rolling_mean(test,3)
-        roll1=pd.rolling_mean(maaa,3)
-        
-        test[:3]
-        test[0:1]
-        roll1[0:5]
-        '''
+''' next steps: level of difference between SMAs... average length of time before crosses'''
