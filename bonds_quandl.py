@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import sys
-sys.path.append('G:/Property/Luis_C/statsLearning')
+#sys.path.append('G:/Property/Luis_C/statsLearning')
+sys.path.append('/home/lechuza/Documents/economicAnalysis/trading')
 import quandl_ror as ror
 '''
 Moodys Aaa
@@ -117,6 +118,36 @@ plt.scatter(aaa_df['ml'],aaa_df['moodys'])
 aaa_df.plot(x='ml',y='moodys',kind='scatter')
 
 np.corrcoef(aaa_df['ml'],aaa_df['moodys'])
+'''finito'''
+
+'''
+Look at correlations and linear relationships between 'spaaa' (# S&P U.S. Issued AA Investment Grade Corporate Bond Index) and 'maaa' (Moodys Index Aaa Bonds)
+'''
+fig=plt.figure()
+'''
+plt.xticks(mlccc.index)
+locs,labels=plt.xticks()
+plt.setp(labels,rotation=45)
+'''
+plt.plot_date(spaaa.index,spaaa,'b-')
+plt.plot_date(spaaa.index,maaa,'g-')
+plt.show()
+
+#that graph is terrible... run a scatterplot
+#first create a df of the two... will do this via a concatenate function - different from a merge
+higrade=pd.concat([spaaa,maaa],axis=1,join='inner') #for some reason this yields values of arrays
+higrade.columns=['sp','moodys']
+plt.scatter(higrade['sp'],higrade['moodys']) #a nice consistent negative correlation
+''' finito'''
+
+'''
+Try to explain spaaa and AA-rated Bond Index OAS (ml_aaoas) and Treasury yields... but this will only work if the average maturity/duration of the SPAA matches that of the OAS
+
+some sources:
+a) http://www.coffeeandcharts.com/wp/2015/10/06/credit-spreads-update-october-2015-part-12/
+b) google: "merrill lynch aa rated oas methodology"
+'''
+
 '''finito'''
 
 '''junk/high yield bonds'''
