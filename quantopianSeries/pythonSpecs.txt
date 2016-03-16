@@ -1,0 +1,3 @@
+conda create --name algos3 python=3 spyder pandas matplotlib statsmodels scipy
+
+conda install -n algos3 -c https://conda.anaconda.org/quantopian zipline
