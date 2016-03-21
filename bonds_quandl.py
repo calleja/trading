@@ -8,8 +8,11 @@ bonds_quandl.py
 
 import Quandl
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import datetime as dt
 import pandas as pd
 import numpy as np
+import pylab as pl
 import sys
 #sys.path.append('G:/Property/Luis_C/statsLearning')
 sys.path.append('/home/lechuza/Documents/economicAnalysis/trading')
@@ -49,30 +52,47 @@ ML offers:
 - CCC Bond Total Return Index
 - US High Yield BB Corporate Index Yield
 '''
-mlccc=Quandl.get("ML/CCCY",returns="pandas",trim_start="2012-01-02", trim_end="2016-02-20")
+mlccc=Quandl.get("ML/CCCY",returns="pandas",trim_start="2012-01-02")
 
-mlhyoas = Quandl.get("ML/HYOAS", trim_start="2012-01-02", trim_end="2016-02-20")
+mlhyoas = Quandl.get("ML/HYOAS", trim_start="2012-01-02")
 
 mlhyoas[-5:]
 mlccc[-5:]
 
 '''
-Let's see how CCC yield and HY OAS move together... we should try to explain why they will vary. First off, they will vary depending on the volatility of Investment Grade corporates, or whatever is the benchmark
+Let's see how CCC yield and HY OAS move together... we should try to explain why they will vary. First off, they will vary depending on the volatility of Investment Grade corporates, or whatever is the benchmark/risk-free rate
 '''
 fig=plt.figure()
 plt.plot_date(mlccc.index,mlccc,'b-')
 plt.plot_date(mlccc.index,mlhyoas,'g-')
-plt.setp(labels, rotation=90)
+fig.autofmt_xdate()
+plt.ylabel('Yield and OAS')
+plt.legend(['ML CCC YTM', 'HY OAS'],loc='best')
 plt.show()
 
 #that plot looks good... now will try to rotate the x-axis labels... the below didn't work... xticks() function (the one w/arguments) may need to be redone
-fig=plt.figure()
+
+#first, let's only consider rates/yields of the last 6 months
+s="01/01/2015"
+fif=dt.datetime.strptime(s,"%m/%d/%Y")
+fif_1=pd.to_datetime(s) # we convert datetime to datetime64 (a pandas convention)
+ml15=mlccc[mlccc.index>fif_1]
+mlhyoas15=mlhyoas[mlhyoas.index>fif_1]
+
+fig,ax=plt.subplots()
 plt.xticks(mlccc.index)
 locs,labels=plt.xticks()
-plt.setp(labels,rotation=45)
-plt.plot_date(mlccc.index,mlccc,'b-')
-plt.plot_date(mlccc.index,mlhyoas,'g-')
+#plt.setp(labels,rotation=45)
+plt.plot_date(ml15.index,ml15,'b-')
+plt.plot_date(ml15.index,mlhyoas15,'g-')
+mdiz=mdates.drange(min(ml15.index),max(ml15.index),dt.timedelta(weeks=6)) #the dates are now floats... want to convert to a matplotlib date
+mdiz1=pl.num2date(mdiz).strftime('%Y-%m-%d') #didn't work
+#try using mdates.DateFormatter() and ax.axis.set_major_formatter()
+plt.legend(['ML CCC YTM', 'HY OAS'],loc='best')
+plt.xticks(mdiz1,rotation='vertical')
 plt.show()
+
+type(mdiz[1])
 
 #scatterplot of these two datasets reveals a strong positive correlation:
 plt.scatter(mlccc,mlhyoas)
